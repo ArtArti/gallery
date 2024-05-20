@@ -7,6 +7,7 @@ import Gallery from './components/Gallery/Gallery';
 import App from './App';
 import Login from './Authentication/Login';
 import './scss/style.scss'
+import Register from './Authentication/Register';
 
 const router = createBrowserRouter(
     createRoutesFromElements(
@@ -16,6 +17,7 @@ const router = createBrowserRouter(
          <Route path='contact' element={<Contact/>}/>
          <Route path='gallery' element={<Gallery/>}/>
          <Route path='login' element={<Login/>}/>
+         <Route path='register' element={<Register/>}/>
       </Route>
     )
   )
