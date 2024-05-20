@@ -21,7 +21,6 @@ function Register() {
       const response = await axios({
         method: "POST",
         url:"https://server-omega-green.vercel.app/api/auth/signup",
-        withCredentials: true,
         data: userData
       });
 
