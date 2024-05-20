@@ -1,15 +1,44 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
-
+import axios from "axios";
 
 const Login = () => {
-    const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+
+  const [loading, setLoading] = useState(false);
+  const [credentials, setCredentials] = useState({ email: "", password: "" });
+  // const URL = process.env.REACT_APP_URL;
+
+  async function handleSignIn(e) {
+    e.preventDefault(); // event.preventDefault() method to prevent the default behavior of an HTML form submission
+    setLoading(true);
+    try {
+      const response = await axios({
+        method: "post",
+        url:"https://server-omega-green.vercel.app/api/auth/signin",
+        withCredentials: true,
+        headers: {
+            "Content-Type": "application/json" // Specify the content type if sending JSON data
+        },
+        data: credentials
+    });
+      if (response.data.success) {
+        alert("login success")
+        navigate("/user");
+      }
+      setLoading(false);
+    } catch (error) {
+      alert(error.response.data.message);
+      setLoading(false);
+    }
+  }
   return (
     <>
       <div
-        className="min-h-screen w-full flex flex-wrap bg-white justify-center items-center">
-         <div className="w-full max-w-sm p-4 border border-gray-200 rounded-lg shadow sm:p-6 md:p-8 dark:bg-orange-700 dark:border-gray-700 m-4">
-      <form className="space-y-6">
+        className="min-h-screen w-full flex flex-wrap bg-cyan-800 justify-center items-center "
+        style={{ backgroundImage: "url(./Images/cloud.jpg)" }}>
+         <div className="w-full max-w-sm p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-6 md:p-8 dark:bg-gray-800 dark:border-gray-700 m-4">
+      <form className="space-y-6" onSubmit={(e) => handleSignIn(e)}>
         <h5 className="text-xl font-medium text-gray-900 dark:text-white">
           Signin to our platform
         </h5>
@@ -25,9 +54,13 @@ const Login = () => {
             type="email"
             name="email"
             id="email"
-            className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-white dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
             placeholder="name@company.com"
             required
+            value={credentials.email}
+            onChange={(e) =>
+              setCredentials({ ...credentials, email: e.target.value })
+            }
           />
         </div>
         {/* email end */}
@@ -44,9 +77,13 @@ const Login = () => {
             name="password"
             id="password"
             placeholder="••••••••"
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-white dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
             required
             minLength="8"
+            value={credentials.password}
+            onChange={(e) =>
+              setCredentials({ ...credentials, password: e.target.value })
+            }
           />
         </div>
         {/* password end */}
@@ -55,7 +92,7 @@ const Login = () => {
         <div className="flex items-start">
           <Link
             to="/forgot"
-            className="ml-auto text-sm text-blue-700 hover:underline dark:text-white"
+            className="ml-auto text-sm text-blue-700 hover:underline dark:text-blue-500"
           >
             Forgot Password?
           </Link>
@@ -65,7 +102,7 @@ const Login = () => {
         {/*  signIn button  */}
         <button
           type="submit"
-          className="w-full text-white bg-gray-700 hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus:ring-blue-800"
+          className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
         >
           Login to your account
           {/* loading */}
@@ -94,7 +131,7 @@ const Login = () => {
 
         {/* create account(signup) */}
         <div className="text-sm font-medium text-gray-500 dark:text-gray-300">
-          Not registered?
+          Not registered?{" "}
           <Link
             to="/register"
             className="text-blue-700 hover:underline dark:text-blue-500"
